@@ -37,9 +37,3 @@ https://github.com/user-attachments/assets/76c67732-08d4-4ad7-ae43-7432ad0e2974
 | **Namespace**       | PascalCase                | `GameEngine.Physics` |
 | **Generic Types**   | T + PascalCase            | `Repository<TItem>`  |
 
-## Installation
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/your-repo-name.git
-   ```

@@ -37,3 +37,23 @@ https://github.com/user-attachments/assets/76c67732-08d4-4ad7-ae43-7432ad0e2974
 | **Namespace**       | PascalCase                | `GameEngine.Physics` |
 | **Generic Types**   | T + PascalCase            | `Repository<TItem>`  |
 
+
+##  Project Structure
+
+| **Directory**          | **Description**                                                                 |
+|-----------------------|---------------------------------------------------------------------------------|
+|  **Assets/**         | Core Unity assets (scripts, scenes, prefabs, materials)                         |
+| ┣  **Scripts/**      | All C# scripts controlling game logic                                           |
+| ┃ ┣  **Managers/**   | Game managers (`GameManager`, `UIManager`, `AudioManager`)                      |
+| ┃ ┣  **Player/**     | Player movement, input handling, and controls                                   |
+| ┃ ┣  **Enemies/**    | Enemy behaviors and AI                                                          |
+| ┃ ┗  **Utilities/**  | Helper scripts and utilities                                                    |
+| ┣  **Prefabs/**      | Reusable game objects (player, enemies, environment)                            |
+| ┣  **Scenes/**       | Unity scenes (`MainMenu`, `Level1`, etc.)                                       |
+| ┣  **Materials/**    | Materials and shaders                                                           |
+| ┗  **UI/**           | UI elements (canvases, buttons, panels)                                         |
+|  **ProjectSettings/** | Unity project settings                                                          |
+|  **Packages/**       | Unity package dependencies                                                      |
+|  **README.md**       | Project documentation                                                          |
+
+---

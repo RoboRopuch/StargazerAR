@@ -24,14 +24,14 @@ public class ARSessionTracker : MonoBehaviour
             case ARSessionState.SessionTracking:
                 if (PreviousState == ARSessionState.SessionInitializing)
                 {
-                    UnitManager.Instance.ForceRotationSync();
+                    // Handle session reinitialization
+                    // Make UnitManager force environment rotation sync
                     SessionLostOverlay.SetActive(false);
+                    UnitManager.Instance.ForceRotationSync();
                 }
                 break;
 
             case ARSessionState.SessionInitializing:
-                // Handle session reinitialization
-                // Notify the UnitManager to force environment rotation sync
                 if (PreviousState == ARSessionState.SessionTracking)
                 {
                     SessionLostOverlay.SetActive(true);

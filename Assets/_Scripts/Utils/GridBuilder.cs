@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 public class GridBuilder : MonoBehaviour
 {
-    [Header("Grid Configuration")]
     [Range(1, 360)] public int azimuthDivisions = 36;
     [Range(1, 90)] public int altitudeDivisions = 9;
     public float sphereRadius = 10f;

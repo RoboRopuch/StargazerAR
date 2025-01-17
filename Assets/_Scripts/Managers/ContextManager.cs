@@ -1,7 +1,3 @@
-// Filename: ContextManager.cs
-// Author: Magdlena Dudek
-// Description: Controls process of storing contextual infromation about user. 
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -26,15 +22,119 @@ public class GeographicCoordinates
 }
 
 
+public abstract class Service
+{
+    public string Name { get; }
+    public int WaitTime { get; }
+    public static Action<string> OnInitializationFailed;
+    public static Action<string> OnTimeout;
+    public static Action OnComplete;
+
+    abstract public void StartInitialization();
+    abstract public bool IsInitializing();
+    abstract public bool CheckIfFailed();
+
+
+    public Service(string name, int waitTime, Action<string> onInitializationFailed, Action onComplete, Action<string> onTimeout)
+    {
+        Name = name;
+        WaitTime = waitTime;
+        OnInitializationFailed = onInitializationFailed;
+        OnTimeout = onTimeout;
+        OnComplete = onComplete;
+    }
+
+    public IEnumerator CoordinateInitialization()
+    {
+        StartInitialization();
+        int localWaitTime = WaitTime;
+
+        string timeoutMessage = $"{Name} initalization timeout";
+        string failedInitializationMessage = $"{Name} initalization failed";
+
+        while (IsInitializing() && localWaitTime > 0)
+        {
+            yield return new WaitForSeconds(1);
+            localWaitTime--;
+        }
+
+        if (localWaitTime < 1)
+        {
+            OnTimeout.Invoke(timeoutMessage);
+            yield break;
+        }
+
+        if (CheckIfFailed())
+        {
+            OnInitializationFailed.Invoke(failedInitializationMessage);
+            yield break;
+        }
+
+        OnComplete.Invoke();
+    }
+}
+
+class LocationService : Service
+{
+    public LocationService(string name, int waitTime, Action<string> onInitializationFailed, Action onComplete, Action<string> onTimeout)
+    : base(name, waitTime, onInitializationFailed, onComplete, onTimeout)
+    { }
+
+    public override bool CheckIfFailed()
+    {
+        return Input.location.status == LocationServiceStatus.Failed;
+    }
+
+    public override bool IsInitializing()
+    {
+        return Input.location.status == LocationServiceStatus.Initializing;
+    }
+
+    public override void StartInitialization()
+    {
+        Input.location.Start();
+    }
+}
+
+class CompassService : Service
+{
+    public CompassService(string name, int waitTime, Action<string> onInitializationFailed, Action onComplete, Action<string> onTimeout)
+    : base(name, waitTime, onInitializationFailed, onComplete, onTimeout)
+    { }
+
+    public override bool CheckIfFailed()
+    {
+        return Input.compass.trueHeading == 0;
+    }
+
+    public override bool IsInitializing()
+    {
+        return Input.compass.trueHeading == 0;
+    }
+
+    public override void StartInitialization()
+    {
+        // We can intiialize compass only after location servise is up and running
+        if (Input.location.status == LocationServiceStatus.Running)
+        {
+            Input.compass.enabled = true;
+        }
+        else
+        {
+            Debug.Log("Tried to initialize compass bfore localization service. You need to make sure localization service is running before.");
+        }
+
+    }
+}
+
 public class ContextManager : StaticInstance<ContextManager>
 {
     public static event Action<GeographicCoordinates> OnLocationChange;
-    public event Action<double> OnComapssChange;
+    public static event Action<double> OnComapssChange;
 
     public bool IsLocationEnabledByUser = false;
     public bool IsLocationServiceInitialized = false;
     public bool IsComapssInitialized = false;
-    private bool IsGyroInitialized = false;
 
     public float NorthDirection;
     public GeographicCoordinates UserLocation { get; private set; } = new GeographicCoordinates(0, 0);
@@ -52,96 +152,15 @@ public class ContextManager : StaticInstance<ContextManager>
 
     private IEnumerator InitializeSensors(Action onComplete, Action<string> onError)
     {
+        LocationService locationService = new("Location Service", 10, onError, () => { IsLocationServiceInitialized = true; }, onError);
+        CompassService compassService = new("Compass", 10, onError, () => { IsComapssInitialized = true; }, onError);
 
-        yield return StartCoroutine(StartLocationService(onError));
-        yield return StartCoroutine(StartCompass(onError));
-        yield return StartCoroutine(StartGyroscope(onError));
+        yield return StartCoroutine(locationService.CoordinateInitialization());
+        yield return StartCoroutine(compassService.CoordinateInitialization());
 
         onComplete?.Invoke();
     }
 
-    private IEnumerator StartLocationService(Action<string> onError)
-    {
-        Input.location.Start();
-
-        int maxWait = 20;
-        while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
-        {
-            yield return new WaitForSeconds(1);
-            maxWait--;
-        }
-
-        if (maxWait < 1)
-        {
-            onError?.Invoke("Location service initialization timed out.");
-            yield break;
-        }
-
-        if (Input.location.status == LocationServiceStatus.Failed)
-        {
-            onError?.Invoke("Unable to initialize location service.");
-            yield break;
-        }
-
-        IsLocationServiceInitialized = true;
-        Debug.Log("Location service started successfully.");
-    }
-
-    /// <summary>
-    /// Starts the compass system.
-    /// </summary>
-    private IEnumerator StartCompass(Action<string> onError)
-    {
-        Input.compass.enabled = true;
-
-        int maxWait = 20;
-        while (Input.compass.trueHeading == 0 && maxWait > 0)
-        {
-            yield return new WaitForSeconds(1);
-            maxWait--;
-        }
-
-        if (maxWait < 1)
-        {
-            onError?.Invoke("Compass initialization timed out.");
-            yield break;
-        }
-
-        if (Input.compass.trueHeading == 0)
-        {
-            onError?.Invoke("Compass initialization failed.");
-            yield break;
-        }
-
-        IsComapssInitialized = true;
-    }
-
-    /// <summary>
-    /// Starts the gyroscope system.
-    /// </summary>
-    private IEnumerator StartGyroscope(Action<string> onError)
-    {
-        Input.gyro.enabled = true;
-
-        int maxWait = 20;
-
-        while (maxWait > 0)
-        {
-            if (Input.gyro.attitude != Quaternion.identity)
-                break;
-
-            yield return new WaitForSeconds(1);
-            maxWait--;
-        }
-
-        if (maxWait < 1)
-        {
-            onError?.Invoke("Gyroscope initialization failed.");
-            yield break;
-        }
-
-        IsGyroInitialized = true;
-    }
     public void UpdateLocationReading()
     {
         if (Input.location.status == LocationServiceStatus.Running)
@@ -150,15 +169,6 @@ public class ContextManager : StaticInstance<ContextManager>
             OnLocationChange.Invoke(UserLocation);
         }
     }
-
-    void UpdateGyroReading()
-    {
-        if (Input.gyro.enabled)
-        {
-            GyroAttitude = Input.gyro.attitude.eulerAngles;
-        }
-    }
-
 
     public float AvgCompassHeading = 0;
     public int Index = 0;
@@ -193,9 +203,7 @@ public class ContextManager : StaticInstance<ContextManager>
     {
         UpdateCompassReding();
         UpdateMovingAvarage();
-        UpdateGyroReading();
     }
-
 
 }
 

@@ -3,15 +3,10 @@ using UnityEngine;
 using JsonSubTypes;
 using Newtonsoft.Json;
 using System;
-using System.Runtime.Serialization;
 
-/// <summary>
-/// Keeping all relevant information about a unit on a scriptable means we can gather and show
-/// info on the menu screen, without instantiating the unit prefab.
-/// </summary>
 
 [JsonConverter(typeof(JsonSubtypes), "Type")]
-public abstract class SkyObject
+public abstract class CelestialBody
 {
 
     public string Type { get; set; }

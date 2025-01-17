@@ -1,60 +1,57 @@
 
 using UnityEngine;
 
-public class PlaceholderManagerView : BaseView<PlaceholderManageModel, PlaceholderManageController>
+public class CelestialBodyDummyView : BaseView<CelestialBodyDummyModel, CelestialBodyDummyController>
 {
     public GameObject placeholderModelPrefab;
     [SerializeField] private LayerMask layerMask;
 
     private void OnEnable()
     {
-        ArInfoPanelView.OnUserSpacePanelReady += HandleObjectHit;
+        ArInfoPanelView.OnInfoPanelReady += HandleinfoPanelReady;
     }
 
     private void OnDisable()
     {
-        ArInfoPanelView.OnUserSpacePanelReady -= HandleObjectHit;
+        ArInfoPanelView.OnInfoPanelReady -= HandleinfoPanelReady;
 
     }
 
-    private void HandleObjectHit(RaycastHit hitObject)
+    private void HandleinfoPanelReady(RaycastHit hitObject)
     {
-        Debug.Log("tap detected");
         Controller.UpdateMaterialFromObject(hitObject);
         UpdateViewFromModel();
     }
 
     public override void UpdateViewFromModel()
     {
-        Debug.Log("Instantiating new prefab...");
-
         Vector3 spawnPosition = placeholderModelPrefab.transform.position;
         Transform spawnParent = placeholderModelPrefab.transform.parent;
 
         Destroy(placeholderModelPrefab);
 
-        var spawn = GameObject.Instantiate(Model.Prefab, spawnParent);
+        GameObject spawn = GameObject.Instantiate(Model.Prefab, spawnParent);
         spawn.transform.position = spawnPosition;
         spawn.transform.localScale = new Vector3(100, 100, 100);
 
         int layer = Mathf.FloorToInt(Mathf.Log(layerMask.value, 2));
         spawn.layer = layer;
 
-        spawn.AddComponent<Rotatable>();
+        spawn.AddComponent<Dummy>();
 
         placeholderModelPrefab = spawn;
     }
 }
 
 
-public class PlaceholderManageModel : BaseModel
+public class CelestialBodyDummyModel : BaseModel
 {
     public GameObject Prefab { get; set; }
 
 }
 
 
-public class PlaceholderManageController : BaseController<PlaceholderManageModel>
+public class CelestialBodyDummyController : BaseController<CelestialBodyDummyModel>
 {
     public void UpdateMaterialFromObject(RaycastHit objTransform)
     {

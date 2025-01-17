@@ -4,46 +4,40 @@ using UnityEngine;
 
 public class GameStateManager : StaticInstance<GameStateManager>
 {
+    private GameState CurrentState;
 
-    private GameState currentState;
-    public CheckPermissionsState checkPermissionsState = new();
-    public LackingPermissionState lackingPermissionState = new();
-    public StartServices startLocalizationServiceState = new();
-    public FetchLocalizationndCompassData fetchSituatedDataState = new();
-    public ErrorInitializingLocation errorInitializingLocation = new();
-    public FetchDataState fetchDataState = new();
-    public ErrorFechingDataState errorFechingDataState = new();
-    public SpawnObjectsState spawnObjectsState = new();
-
-
-    public bool isFirebaseReady = false;
+    public InitializeFirebaseState InitializeFirebaseState = new();
+    public CheckPermissionsState CheckPermissionsState = new();
+    public LackingPermissionState LackingPermissionState = new();
+    public StartServices StartLocalizationServiceState = new();
+    public FetchLocalizationndCompassData FetchSituatedDataState = new();
+    public ErrorInitializingLocation ErrorInitializingLocation = new();
+    public FetchDataState FetchDataState = new();
+    public ErrorFechingDataState ErrorFechingDataState = new();
+    public SpawnObjectsState SpawnObjectsState = new();
 
     public void SwitchState(GameState newState)
     {
-        Debug.LogWarning($"Switching to state: {newState}");
-        if (currentState == newState)
+        if (CurrentState == newState)
         {
             Debug.LogWarning($"Already in state: {newState}");
 
         }
 
-
-        currentState = newState;
-        currentState.EnterState(this);
+        CurrentState = newState;
+        CurrentState.EnterState(this);
     }
 
 
     void Start()
     {
-        FirebaseManager.Instance.Initialize();
-
-        currentState = checkPermissionsState;
-        currentState.EnterState(this);
+        CurrentState = InitializeFirebaseState;
+        CurrentState.EnterState(this);
     }
 
     void Update()
     {
-        currentState.UpdateState(this);
+        CurrentState.UpdateState(this);
     }
 
 }
@@ -57,6 +51,21 @@ public abstract class GameState
 }
 
 
+public class InitializeFirebaseState : GameState
+{
+    public override void EnterState(GameStateManager manager)
+    {
+        FirebaseManager.Instance.Initialize();
+        manager.SwitchState(manager.CheckPermissionsState);
+    }
+
+    public override void UpdateState(GameStateManager manager)
+    {
+
+    }
+
+}
+
 public class CheckPermissionsState : GameState
 {
     public override void EnterState(GameStateManager manager)
@@ -65,12 +74,12 @@ public class CheckPermissionsState : GameState
 
         if (ContextManager.Instance.IsLocationEnabledByUser)
         {
-            manager.SwitchState(manager.startLocalizationServiceState);
+            manager.SwitchState(manager.StartLocalizationServiceState);
         }
         else
         {
-            manager.SwitchState(manager.lackingPermissionState);
-        };
+            manager.SwitchState(manager.LackingPermissionState);
+        }
 
     }
 
@@ -84,7 +93,7 @@ public class LackingPermissionState : GameState
 {
     public override void EnterState(GameStateManager manager)
     {
-        manager.SwitchState(manager.fetchDataState);
+        manager.SwitchState(manager.FetchDataState);
     }
 
     public override void UpdateState(GameStateManager manager)
@@ -131,11 +140,11 @@ public class StartServices : GameState
         ContextManager.Instance.ActivateSensors(
             () =>
             {
-                manager.SwitchState(manager.fetchSituatedDataState);
+                manager.SwitchState(manager.FetchSituatedDataState);
             },
             error =>
             {
-                manager.SwitchState(manager.errorInitializingLocation);
+                manager.SwitchState(manager.ErrorInitializingLocation);
             });
 
     }
@@ -157,14 +166,13 @@ public class FetchLocalizationndCompassData : GameState
     public override void EnterState(GameStateManager manager)
     {
         ContextManager.Instance.UpdateLocationReading();
-        manager.SwitchState(manager.fetchDataState);
+        manager.SwitchState(manager.FetchDataState);
     }
 
     public override void UpdateState(GameStateManager manager)
     {
 
     }
-
 
 }
 
@@ -177,16 +185,12 @@ public class FetchDataState : GameState
 
     private IEnumerator WaitForDataAndTransition(GameStateManager manager)
     {
-        Debug.Log("Fetching data...");
-
         if (!FirebaseManager.Instance.IsDataLoaded)
         {
-            Debug.Log("Data not yet loaded. Waiting...");
             yield return FirebaseManager.Instance.WaitForDataLoad();
         }
 
-        Debug.Log("Data loaded. Transitioning to spawnObjectsState...");
-        manager.SwitchState(manager.spawnObjectsState);
+        manager.SwitchState(manager.SpawnObjectsState);
     }
 
     public override void UpdateState(GameStateManager manager)
@@ -199,7 +203,7 @@ public class SpawnObjectsState : GameState
 {
     public override void EnterState(GameStateManager manager)
     {
-        UnitManager.Instance.SpawnHeroes();
+        UnitManager.Instance.SpawnUnits();
 
     }
 

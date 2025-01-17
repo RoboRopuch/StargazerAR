@@ -8,13 +8,15 @@ using UnityEngine;
 public class FirebaseManager : StaticInstance<FirebaseManager>
 {
     private DatabaseReference DatabaseReference;
-    public List<SkyObject> ObjectCache = new();
+    public List<CelestialBody> ObjectCache = new();
 
     public bool IsInitialized { get; private set; } = false;
     public bool IsDataLoaded { get; private set; } = false;
 
     public void Initialize()
     {
+        FirebaseApp.LogLevel = LogLevel.Verbose;
+
         AppOptions options = new AppOptions
         {
             ApiKey = "...",
@@ -23,6 +25,7 @@ public class FirebaseManager : StaticInstance<FirebaseManager>
             DatabaseUrl = new System.Uri("..."),
             StorageBucket = "..."
         };
+
 
         FirebaseApp.Create(options);
 
@@ -43,6 +46,11 @@ public class FirebaseManager : StaticInstance<FirebaseManager>
                 Debug.LogError($"Firebase failed to initialize: {task.Result}");
             }
         });
+    }
+
+    public List<CelestialBody> GetCelestialBodies()
+    {
+        return ObjectCache;
     }
 
     private void LoadAllData()
@@ -78,14 +86,13 @@ public class FirebaseManager : StaticInstance<FirebaseManager>
 
         foreach (var child in snapshot.Children)
         {
-            SkyObject celestial = JsonUtility.Deserialize<SkyObject>(child.GetRawJsonValue(), Debug.LogError);
+            CelestialBody celestial = JsonUtility.Deserialize<CelestialBody>(child.GetRawJsonValue(), Debug.LogError);
             if (celestial != null)
             {
                 ObjectCache.Add(celestial);
             }
         }
 
-        Debug.Log($"Cache updated. Total items: {ObjectCache.Count}");
         IsDataLoaded = true;
     }
 

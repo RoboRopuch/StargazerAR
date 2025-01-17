@@ -5,10 +5,10 @@ public class Billboard : MonoBehaviour
     private Camera mainCamera;
 
     [SerializeField]
-    private float rotationSpeed = 5f; // Rotation speed for smoothing
+    private float RotationSpeed = 5f;
 
     [SerializeField]
-    private bool smoothRotation = false; // Toggle for smooth rotation, default is true
+    private bool SmoothRotation = false;
 
     void Start()
     {
@@ -19,14 +19,14 @@ public class Billboard : MonoBehaviour
     {
         if (mainCamera != null)
         {
-            if (smoothRotation)
+            if (SmoothRotation)
             {
                 // Smooth rotation
                 Quaternion targetRotation = Quaternion.LookRotation(
                     transform.position - mainCamera.transform.position,
                     mainCamera.transform.up
                 );
-                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * RotationSpeed);
             }
             else
             {
@@ -39,15 +39,13 @@ public class Billboard : MonoBehaviour
         }
     }
 
-    // Method to toggle smooth rotation at runtime
     public void ToggleSmoothRotation(bool enable)
     {
-        smoothRotation = enable;
+        SmoothRotation = enable;
     }
 
-    // Optional: Set rotation speed dynamically
     public void SetRotationSpeed(float speed)
     {
-        rotationSpeed = speed;
+        RotationSpeed = speed;
     }
 }

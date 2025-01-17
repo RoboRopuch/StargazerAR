@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class Interactable : MonoBehaviour
 {
-    public SkyObject data;
+    public CelestialBody data;
 
-    public SkyObject GetData()
+    public CelestialBody GetData()
     {
         return data;
     }

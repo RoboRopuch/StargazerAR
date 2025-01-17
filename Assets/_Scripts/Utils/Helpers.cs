@@ -65,7 +65,7 @@ public static class Helpers
         return NormalizeAngle(hourAngle);
     }
 
-    public static Vector3 CalculatePosition(double azimuth, double altitude, float distance)
+    public static Vector3 GeographicToCartesian(double azimuth, double altitude, float distance)
     {
         float azRad = Mathf.Deg2Rad * (float)azimuth;
         float altRad = Mathf.Deg2Rad * (float)altitude;
@@ -150,11 +150,15 @@ public static class Helpers
     }
 
 
-    public static SkyObject GetAssociatedObject(RaycastHit objectToGetDataFrom)
+    public static CelestialBody GetAssociatedObject(RaycastHit objectToGetDataFrom)
     {
-        SkyObject data = objectToGetDataFrom.transform.GetComponent<Interactable>().data;
-        Debug.Log(data);
+        CelestialBody data = objectToGetDataFrom.transform.GetComponent<Interactable>().data;
         return data;
+    }
+
+    public static Interactable GetInteractable(GameObject objectToExtracTinteractableFrom)
+    {
+        return objectToExtracTinteractableFrom.GetComponent<Interactable>();
     }
 
 

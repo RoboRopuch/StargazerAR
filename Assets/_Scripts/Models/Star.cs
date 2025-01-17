@@ -5,7 +5,7 @@ using UnityEngine;
 
 
 
-public class Star : SkyObject
+public class Star : CelestialBody
 {
 
     public double RightAscension;
@@ -51,15 +51,4 @@ public class Star : SkyObject
         gameObject.transform.localScale = Vector3.one * Helpers.MapRange((float)Magnitude, 0, 4, 0.4f, 1);
 
     }
-
-    // public override GameObject SpawnSelf(Vector3 position)
-    // {
-
-    //     var spawned = GameObject.Instantiate(SimplifiedPrefab, position, Quaternion.identity);
-    //     spawned.name = Name;
-    //     spawned.transform.LookAt(UnitManager.Instance.ARCamera.transform, Vector3.down);
-    //     spawned.transform.localScale = Vector3.one * Helpers.MapRange((float)Magnitude, 0, 4, 0.4f, 1);
-
-    //     return spawned;
-    // }
 }

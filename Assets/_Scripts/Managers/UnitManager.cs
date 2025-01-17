@@ -1,36 +1,29 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
-/// <summary>
-/// An example of a scene-specific manager grabbing resources from the resource system
-/// Scene-specific managers are things like grid managers, unit managers, environment managers etc
-/// </summary>
+
 public class UnitManager : StaticInstance<UnitManager>
 {
     public float CelestialSphereRadius = 50;
-    public GridBuilder grid;
+    public GridBuilder Grid;
     public Camera ARCamera;
-    public GameObject enviroment;
-    private Quaternion previousEnviromentRotation;
-    private Quaternion currentEnviromentRotation;
-    private bool isSmoothlyRotating;
+    public GameObject Enviroment;
+    private Quaternion PreviousEnviromentRotation;
+    private Quaternion CurrentEnviromentRotation;
+    private bool IsRotating;
 
 
     void Start()
     {
-        previousEnviromentRotation = enviroment.transform.rotation;
-        currentEnviromentRotation = enviroment.transform.rotation;
+        PreviousEnviromentRotation = Enviroment.transform.rotation;
+        CurrentEnviromentRotation = Enviroment.transform.rotation;
     }
 
-    public void SpawnHeroes()
+    public void SpawnUnits()
     {
-        grid.DrawGrid(enviroment.transform, CelestialSphereRadius);
-        Debug.Log("I am here");
-        SpawnUnits();
+        Grid.DrawGrid(Enviroment.transform, CelestialSphereRadius);
+        SpawnCelestialBodies();
     }
 
     IEnumerator AlignEnviromentWithAvarageNorth()
@@ -41,7 +34,6 @@ public class UnitManager : StaticInstance<UnitManager>
 
     }
 
-
     private void AlignEnviromentWithNorth()
     {
         float initialNorth = ContextManager.Instance.NorthDirection;
@@ -51,49 +43,55 @@ public class UnitManager : StaticInstance<UnitManager>
 
     private void UpdateEnvRotation(Quaternion newRotation, bool smoothlyRotate)
     {
-        previousEnviromentRotation = currentEnviromentRotation;
-        currentEnviromentRotation = newRotation;
+        PreviousEnviromentRotation = CurrentEnviromentRotation;
+        CurrentEnviromentRotation = newRotation;
 
         if (!smoothlyRotate)
         {
-            enviroment.transform.rotation = currentEnviromentRotation;
+            Enviroment.transform.rotation = CurrentEnviromentRotation;
         }
         else
         {
-            isSmoothlyRotating = true;
+            IsRotating = true;
         }
     }
 
     public void ForceRotationSync()
     {
-        enviroment.transform.rotation = currentEnviromentRotation;
+        Enviroment.transform.rotation = CurrentEnviromentRotation;
     }
 
-    void SpawnUnits()
+    void SpawnCelestialBody(CelestialBody celestial)
     {
-        var celestials = FirebaseManager.Instance.ObjectCache;
-        (double latitude, double longitude) = ContextManager.Instance.UserLocation.GetCoordinates();
-        DateTime time = DateTime.Now;
+        Vector3 cartesianPosition = ARCamera.transform.position + Helpers.GeographicToCartesian(celestial.Azimuth, celestial.Altitude, CelestialSphereRadius);
+        GameObject celestialPrefab = celestial.GetPrefab(false);
+        GameObject spawn = GameObject.Instantiate(celestialPrefab, cartesianPosition, Quaternion.identity);
+        spawn.name = celestial.Name;
+        Helpers.GetInteractable(spawn).data = celestial;
+        celestial.AfterSpawn(spawn);
+        spawn.transform.SetParent(Enviroment.transform);
+    }
 
-        foreach (var celestial in celestials)
+    void SpawnCelestialBodies()
+    {
+
+        var celestialBodiesToSpawn = FirebaseManager.Instance.ObjectCache;
+        (double userLatitude, double userLongitude) = ContextManager.Instance.UserLocation.GetCoordinates();
+        DateTime timeOfObservation = DateTime.Now;
+
+        foreach (var celestial in celestialBodiesToSpawn)
         {
             try
             {
-                celestial.CalculateAzimuthAltitude(longitude, latitude, time);
+                celestial.CalculateAzimuthAltitude(userLongitude, userLatitude, timeOfObservation);
+
                 if (celestial.Altitude < -10)
                 {
                     continue;
                 }
                 else
                 {
-                    Vector3 cartesianPosition = ARCamera.transform.position + Helpers.CalculatePosition(celestial.Azimuth, celestial.Altitude, CelestialSphereRadius);
-                    GameObject celestialPrefab = celestial.GetPrefab(false);
-                    var spawn = GameObject.Instantiate(celestialPrefab, cartesianPosition, Quaternion.identity);
-                    spawn.name = celestial.Name;
-                    var interactable = spawn.GetComponent<Interactable>();
-                    interactable.data = celestial;
-                    celestial.AfterSpawn(spawn);
-                    spawn.transform.SetParent(enviroment.transform);
+                    SpawnCelestialBody(celestial);
                 }
             }
             catch (Exception ex)
@@ -110,12 +108,12 @@ public class UnitManager : StaticInstance<UnitManager>
 
     void Update()
     {
-        if (isSmoothlyRotating && previousEnviromentRotation != currentEnviromentRotation)
+        if (IsRotating && PreviousEnviromentRotation != CurrentEnviromentRotation)
         {
-            enviroment.transform.rotation = Quaternion.Lerp(enviroment.transform.rotation, currentEnviromentRotation, Time.deltaTime * 5f);
-            if (Quaternion.Angle(enviroment.transform.rotation, currentEnviromentRotation) < 0.01f)
+            Enviroment.transform.rotation = Quaternion.Lerp(Enviroment.transform.rotation, CurrentEnviromentRotation, Time.deltaTime * 5f);
+            if (Quaternion.Angle(Enviroment.transform.rotation, CurrentEnviromentRotation) < 0.01f)
             {
-                isSmoothlyRotating = false;
+                IsRotating = false;
             }
         }
 

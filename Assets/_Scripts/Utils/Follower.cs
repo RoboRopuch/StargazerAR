@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class Follower : MonoBehaviour
 {
-    public GameObject obectToFollow;
+    public GameObject ObjectToFollow;
     void Update()
     {
-        transform.position = obectToFollow.transform.position;
+        transform.position = ObjectToFollow.transform.position;
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using CosineKitty;
 using UnityEngine;
 
-public class Planet : SkyObject
+public class Planet : CelestialBody
 {
 
     public double Radius;
@@ -46,30 +46,5 @@ public class Planet : SkyObject
 
         return KeyValue;
     }
-
-    // public override GameObject SpawnSelf(Vector3 position, GameObject prefab)
-    // {
-
-    //     //double adjustedAzimuth = (Azimuth + trueNorth) % 360;
-
-    //     //Vector3 sphereCoordinates = Helpers.CalculatePosition(Azimuth, Altitude, celestialSphereRadius);
-
-    //     //var spawned = GameObject.Instantiate(Prefab, user.position + sphereCoordinates, Quaternion.identity);
-
-    //     var spawned = GameObject.Instantiate(prefab, position, Quaternion.identity);
-    //     spawned.name = Name;
-
-    //     var interactable = spawned.GetComponent<InteractableObject>();
-    //     interactable.data = this;
-
-    //     spawned.transform.localScale = Vector3.one * Helpers.MapRange((float)Radius, 1180, 695508, 1, 2);
-
-    //     return spawned;
-
-
-
-
-    // }
-
 
 }

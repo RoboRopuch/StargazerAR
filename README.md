@@ -1,8 +1,8 @@
 # Stargazer App
 
 ![Unity](https://img.shields.io/badge/Engine-Unity-black?logo=unity)
-![License](https://img.shields.io/github/license/yourusername/your-repo-name)
-![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Mac%20%7C%20Linux-blue)
+![Platform](https://img.shields.io/badge/Platform-Android-green?logo=android)
+
 
 ## Overview
 

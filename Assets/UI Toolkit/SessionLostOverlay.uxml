@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="VisualElement" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.47); justify-content: flex-start; align-items: center; align-self: auto;">
+        <ui:VisualElement style="flex-grow: 0; flex-direction: row; flex-shrink: 0; align-self: stretch; justify-content: center; margin-top: 59px;">
+            <ui:VisualElement style="flex-grow: 0; background-image: resource(&apos;exclamation&apos;); flex-shrink: 0; -unity-background-scale-mode: stretch-to-fill; width: 32px; height: 32px; align-self: stretch;" />
+            <ui:Label tabindex="-1" text="Visual tracking lost" parse-escape-sequences="true" display-tooltip-when-elided="true" style="border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); background-color: rgba(0, 0, 0, 0); color: rgb(255, 255, 255);" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

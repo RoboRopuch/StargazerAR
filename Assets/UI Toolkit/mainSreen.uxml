@@ -1,0 +1,23 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/main-screen.uss?fileID=7433441132597879392&amp;guid=50148ede21f9fea439a1e0c665fd8d41&amp;type=3#main-screen" />
+    <ui:VisualElement name="VisualElement" style="flex-grow: 1; justify-content: space-around; flex-shrink: 1; align-items: flex-end; flex-direction: row; align-self: center;">
+        <ui:VisualElement name="header" style="align-self: flex-start; -unity-slice-scale: 0.8px;">
+            <ui:VisualElement name="panel" style="flex-grow: 0; background-image: resource(&apos;solid-background&apos;); border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; -unity-background-image-tint-color: rgb(29, 26, 26); flex-shrink: 0; height: auto; align-items: flex-start; flex-direction: column; width: initial; margin-bottom: 0; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; margin-left: 0; align-self: stretch;">
+                <ui:VisualElement name="VisualElement" style="flex-grow: 1; flex-direction: row; justify-content: flex-start; margin-bottom: 5px;">
+                    <ui:Label tabindex="-1" text="lon." parse-escape-sequences="true" display-tooltip-when-elided="true" name="lonLabel" style="-unity-font-style: bold; color: rgb(255, 255, 255); width: initial; height: initial; font-size: 14px; justify-content: center; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
+                    <ui:Label tabindex="-1" text="0" parse-escape-sequences="true" display-tooltip-when-elided="true" name="longitudeInput" style="color: rgb(255, 255, 255); justify-content: space-around; align-self: auto; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
+                </ui:VisualElement>
+                <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
+                    <ui:Label tabindex="-1" text="lat." parse-escape-sequences="true" display-tooltip-when-elided="true" name="latLabel" style="-unity-font-style: bold; color: rgb(255, 255, 255); width: initial; height: initial; font-size: 14px; justify-content: center; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                    <ui:Label tabindex="-1" text="0" parse-escape-sequences="true" display-tooltip-when-elided="true" name="latitudeInput" style="color: rgb(255, 255, 255); justify-content: space-around; align-self: auto; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="footer" class="bottomsheet">
+        <ui:VisualElement name="panel" style="flex-grow: 0; background-image: resource(&apos;solid-background&apos;); border-top-left-radius: 25px; border-top-right-radius: 25px; border-bottom-right-radius: 25px; border-bottom-left-radius: 25px; -unity-background-image-tint-color: rgb(29, 26, 26); flex-shrink: 0; height: auto; align-items: center; flex-direction: row; width: initial; margin-bottom: 10px; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;">
+            <ui:Label tabindex="-1" text="Sun" parse-escape-sequences="true" display-tooltip-when-elided="true" name="name" style="-unity-font-style: bold; color: rgb(255, 255, 255); width: initial; height: initial; font-size: 20px; justify-content: center;" />
+            <ui:Label tabindex="-1" text="316.02° x -78.08°" parse-escape-sequences="true" display-tooltip-when-elided="true" name="coordinates" style="color: rgb(255, 255, 255); justify-content: space-around; align-self: auto;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

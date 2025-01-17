@@ -1,0 +1,33 @@
+.bottomsheet {
+    flex-grow: 0;
+    flex-direction: row;
+    flex-shrink: 0;
+    justify-content: center;
+    transform-origin: center;
+    translate: 0 100%;
+    transition-duration: 0.5s;
+    transition-timing-function: ease-out;
+}
+
+.bottomsheet--up {
+    translate: 0 0;
+    transition-timing-function: ease-in-out;
+}
+
+.debugPanel {
+    flex-grow: 1;
+    background-image: resource('solid-background');
+    -unity-background-image-tint-color: rgb(28, 26, 26);
+    width: 293px;
+    height: auto;
+    margin-top: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    max-height: 100%;
+    max-width: initial;
+}

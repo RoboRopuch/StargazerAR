@@ -6,54 +6,33 @@
 
 ## Overview
 
-A brief description of what your Unity project is about.
-
-Example: A 3D action-adventure game where players explore a mystical world to solve puzzles and defeat enemies.
+This project is a mobile application designed to facilitate the identification and exploration of celestial bodies using augmented reality (AR). The application overlays 3D models of stars and planets onto the real-world image captured by the smartphone’s camera.
 
 ## Features
 
-- Feature 1: Describe a key feature.
-- Feature 2: Another feature of the game.
-- Feature 3: More features.
-
-## Demo
-
-
-https://github.com/user-attachments/assets/76c67732-08d4-4ad7-ae43-7432ad0e2974
-
-
-## Naming convention used
-
-| **Element**         | **Convention**            | **Example**          |
-| ------------------- | ------------------------- | -------------------- |
-| **Class/Struct**    | PascalCase                | `PlayerController`   |
-| **Method**          | PascalCase                | `MovePlayer()`       |
-| **Property**        | PascalCase                | `PlayerName`         |
-| **Field (Private)** | \_camelCase (Underscore)  | `_playerHealth`      |
-| **Local Variable**  | camelCase                 | `playerScore`        |
-| **Constant**        | ALL_CAPS_WITH_UNDERSCORES | `MAX_SPEED`          |
-| **Interface**       | I + PascalCase            | `IMovable`           |
-| **Enum**            | PascalCase                | `GameState.Playing`  |
-| **Namespace**       | PascalCase                | `GameEngine.Physics` |
-| **Generic Types**   | T + PascalCase            | `Repository<TItem>`  |
-
-
+- Real-time overlay of celestial models.
+- True north readings stabiliztaion.
+- Data acccess in online and offline mode, facilitated by Firbease platform. 
+- Body stabilized eleemnts position interpolation.
+  
 ##  Project Structure
 
 | **Directory**          | **Description**                                                                 |
 |-----------------------|---------------------------------------------------------------------------------|
 |  **Assets/**         | Core Unity assets (scripts, scenes, prefabs, materials)                         |
-| ┣  **Scripts/**      | All C# scripts controlling game logic                                           |
-| ┃ ┣  **Managers/**   | Game managers (`GameManager`, `UIManager`, `AudioManager`)                      |
-| ┃ ┣  **Player/**     | Player movement, input handling, and controls                                   |
-| ┃ ┣  **Enemies/**    | Enemy behaviors and AI                                                          |
-| ┃ ┗  **Utilities/**  | Helper scripts and utilities                                                    |
-| ┣  **Prefabs/**      | Reusable game objects (player, enemies, environment)                            |
-| ┣  **Scenes/**       | Unity scenes (`MainMenu`, `Level1`, etc.)                                       |
-| ┣  **Materials/**    | Materials and shaders                                                           |
-| ┗  **UI/**           | UI elements (canvases, buttons, panels)                                         |
+| ┣  **_Scripts/**      | All C# scripts controlling game logic                                           |
+| ┃ ┣  **[Managers/](https://github.com/RoboRopuch/StargazerAR/tree/main/Assets/_Scripts/Managers)**   | Game managers (`GameManager`, `UnitManager`, `FirebaseManager`) |
+| ┃ ┣  **[Models/](https://github.com/RoboRopuch/StargazerAR/tree/main/Assets/_Scripts/Models)**     | Classes defining celestial bodies in app  |
+| ┃ ┣  **[UI/](https://github.com/RoboRopuch/StargazerAR/tree/main/Assets/_Scripts/UI)**    | All UI elements components, screen-stabilized and body-stabilized |
+| ┃ ┗  **[Utils/](https://github.com/RoboRopuch/StargazerAR/tree/main/Assets/_Scripts/Utils)**  | Helper scripts and utilities                                                    |
+| ┣  **Resources/**      | Graphic files used in UI and in materials for game objects                            |
+| ┃ ┣  **[Prefabs/](https://github.com/RoboRopuch/StargazerAR/tree/main/Assets/Resources/Prefabs)**   | Reusable game objects, including models for stars and planets |
+| ┃ ┗  **[Materials/](https://github.com/RoboRopuch/StargazerAR/tree/main/Assets/Resources/Materials)**  | Materials used by game objects|    
 |  **ProjectSettings/** | Unity project settings                                                          |
 |  **Packages/**       | Unity package dependencies                                                      |
-|  **README.md**       | Project documentation                                                          |
+
+## Demo
+https://github.com/user-attachments/assets/76c67732-08d4-4ad7-ae43-7432ad0e2974
+
 
 ---

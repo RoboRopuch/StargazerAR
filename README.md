@@ -6,14 +6,14 @@
 
 ## Overview
 
-This project is a mobile application designed in Unity. It uses ArFoundation package ot overlay 3D models of stars and planets onto the real-world image captured by the smartphone’s camera. 
+This project is a mobile application designed in Unity. It uses ARFoundation package ot overlay 3D models of stars and planets onto the real-world image captured by the smartphone’s camera. The goal is to showcase the potential of augmented reality usage in astronomy and to provide an interactive, engaging tool for deepening one’s knowledge of the Universe.
 
 ## Features
 
 - Real-time overlay of celestial models.
 - True north readings stabiliztaion.
 - Data acccess in online and offline mode, facilitated by Firbease platform. 
-- Body stabilized eleemnts position interpolation.
+- Body stabilized elements movement interpolation.
   
 ##  Project Structure
 

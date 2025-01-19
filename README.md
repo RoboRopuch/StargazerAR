@@ -6,7 +6,7 @@
 
 ## Overview
 
-This project is a mobile application designed to facilitate the identification and exploration of celestial bodies using augmented reality (AR). The application overlays 3D models of stars and planets onto the real-world image captured by the smartphone’s camera.
+This project is a mobile application designed in Unity. It uses ArFoundation package ot overlay 3D models of stars and planets onto the real-world image captured by the smartphone’s camera. 
 
 ## Features
 
